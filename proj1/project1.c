@@ -21,11 +21,12 @@ int main(void) {
 		fgets(buffer, sizeof(buffer), stdin);
 		// remove new line at the end
 		buffer[strcspn(buffer, "\n")] = 0;
+		// split input into args char array
 		args = strtok(buffer, delim);
-		while (args != NULL) {
+		/*while (args != NULL) {
 			printf("%s\n", args);
 			args = strtok(NULL, delim);
-		}
+		}*/
 	}
 	return 0;
 }
