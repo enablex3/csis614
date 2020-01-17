@@ -19,6 +19,9 @@ int main(void) {
 	int bg_run;
 	pid_t pid;
 
+	// history
+	char buffer_h[MAX_LINE];
+
 	while (should_run) {
 		printf("project1>");
 		fflush(stdout);
@@ -26,6 +29,14 @@ int main(void) {
 		fgets(buffer, sizeof(buffer), stdin);
 		// remove new line at the end
 		buffer[strcspn(buffer, "\n")] = 0;
+		// check if user wants to use history feat.
+		if (strstr(buffer, "!!") != NULL) {
+			strcpy(buffer, buffer_h);
+			printf("Executed most recent command: %s\n", buffer);
+		}
+		else {
+			strcpy(buffer_h, buffer);
+		}
 		// split input into args char array
 		tok = strtok(buffer, delim);
 		k = 0;
@@ -42,6 +53,7 @@ int main(void) {
 		pid = fork();
 		if (pid == 0) {
 			execvp(args[0], args);
+			fflush(stdout);
 			return 0;
 		}
 		else if (pid > 0) {
@@ -49,7 +61,6 @@ int main(void) {
 				wait(NULL);
 			}
 		}
-		
 	}
 	return 0;
 }
