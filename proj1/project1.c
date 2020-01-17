@@ -20,7 +20,7 @@ int main(void) {
 	pid_t pid;
 
 	// history
-	char buffer_h[MAX_LINE];
+	char buffer_h[MAX_LINE] = "";
 
 	while (should_run) {
 		printf("project1>");
@@ -31,8 +31,13 @@ int main(void) {
 		buffer[strcspn(buffer, "\n")] = 0;
 		// check if user wants to use history feat.
 		if (strstr(buffer, "!!") != NULL) {
-			strcpy(buffer, buffer_h);
-			printf("Executed most recent command: %s\n", buffer);
+			if (buffer_h[0] == '\0') {
+				printf("No command history!\n");
+			}
+			else {
+			    strcpy(buffer, buffer_h);
+			    printf("Executed most recent command: %s\n", buffer);
+			}
 		}
 		else {
 			strcpy(buffer_h, buffer);
