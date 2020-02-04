@@ -21,9 +21,11 @@ int main(void) {
 
 	// history
 	char buffer_h[MAX_LINE] = "";
+	char *history_array[MAX_LINE/2 + 1];
+	int h;
 
 	while (should_run) {
-		printf("project1>");
+		printf("the_shell>");
 		fflush(stdout);
 		// get input command line
 		fgets(buffer, sizeof(buffer), stdin);
@@ -39,8 +41,25 @@ int main(void) {
 			    printf("Executed most recent command: %s\n", buffer);
 			}
 		}
+		else if (strstr(buffer, "!") != NULL) {
+			int history_idx = atoi(&buffer[1]);
+			if (&history_array[history_idx] != NULL) {
+				printf("Command is %s\n", history_array[history_idx]);
+			}
+			else {
+				printf("No command found at that history level.\n");
+			}
+		}
 		else {
 			strcpy(buffer_h, buffer);
+			// add to history array
+			for (int i = 0; i < sizeof(history_array) / sizeof(history_array[0]); i++) {
+				if (history_array[i] == NULL) {
+					history_array[i] = buffer_h;
+					break;
+				}
+				printf("History command %s", history_array[i]);
+			}
 		}
 		// split input into args char array
 		tok = strtok(buffer, delim);
@@ -54,7 +73,9 @@ int main(void) {
 				bg_run = 0;
 			}
 			tok = strtok(NULL, delim);
+			k++;
 		}
+		args[k] = NULL;
 		pid = fork();
 		if (pid == 0) {
 			execvp(args[0], args);
