@@ -21,8 +21,8 @@ int main(void) {
 
 	// history
 	char buffer_h[MAX_LINE] = "";
-	char *history_array[MAX_LINE/2 + 1];
-	int h;
+	char history_array[20][MAX_LINE]; // 20 is an arbitrary integer for max history levels
+	int h = 0;
 
 	while (should_run) {
 		printf("the_shell>");
@@ -43,31 +43,33 @@ int main(void) {
 		}
 		else if (strstr(buffer, "!") != NULL) {
 			int history_idx = atoi(&buffer[1]);
-			if (&history_array[history_idx] != NULL) {
-				printf("Command is %s\n", history_array[history_idx]);
+			if (history_array[history_idx][0] != '@') {
+				strcpy(buffer, history_array[history_idx]);
+				printf("Executed command at level %d: %s\n", history_idx, history_array[history_idx]);
 			}
 			else {
-				printf("No command found at that history level.\n");
+				printf("No command at history level %d\n", history_idx);
+			}
+		}
+		else if (strstr(buffer, "history") != NULL) {
+			for (int i = 0; i < h; i++) {
+				printf("%d %s\n", i + 1, history_array[i + 1]);
 			}
 		}
 		else {
 			strcpy(buffer_h, buffer);
 			// add to history array
-			for (int i = 0; i < sizeof(history_array) / sizeof(history_array[0]); i++) {
-				if (history_array[i] == NULL) {
-					history_array[i] = buffer_h;
-					break;
-				}
-				printf("History command %s", history_array[i]);
-			}
+			strcpy(history_array[h + 1], buffer);
+			h++;
 		}
 		// split input into args char array
 		tok = strtok(buffer, delim);
 		k = 0;
 		while (tok != NULL) {
 			args[k] = tok;
-			if (tok == "&") {
+			if (strstr(tok, "&")) {
 				bg_run = 1;
+				args[k] = NULL;
 			}
 			else {
 				bg_run = 0;
