@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-int n_values[10000]; // 10000 as max number of integers in the array
-int fibonacci_sequence[10000];
+int n_values[1000000]; // 10000 as max number of integers in the array
+int fibonacci_sequence[1000000];
 int n;
 int f;
 
