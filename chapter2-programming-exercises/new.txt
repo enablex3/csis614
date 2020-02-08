@@ -1,0 +1,4 @@
+This is all the content from the testfile.txt
+If your program is successful, then this content will also be in your output file!
+
+If you successful, then you're cool dude!
