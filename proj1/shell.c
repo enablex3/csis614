@@ -52,9 +52,12 @@ int main(void) {
 			}
 		}
 		else if (strstr(buffer, "history") != NULL) {
-			for (int i = 0; i < h; i++) {
-				printf("%d %s\n", i + 1, history_array[i + 1]);
+			for (int i = 0; i <= h; i++) {
+				printf("%d %s\n", i, history_array[i]);
 			}
+		}
+		else if (strstr(buffer, "exit") != NULL) {
+			exit(0);
 		}
 		else {
 			strcpy(buffer_h, buffer);

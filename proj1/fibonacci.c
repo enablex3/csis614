@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-int n_values[1000000]; // 10000 as max number of integers in the array
-int fibonacci_sequence[1000000];
+#define MAX_NUMBERS 1000000
+#define MAX_LENGTH 7
+
+int n_values[MAX_NUMBERS]; // 10000 as max number of integers in the array
+int fibonacci_sequence[MAX_NUMBERS];
 int n;
 int f;
 
@@ -18,7 +21,7 @@ void generateNValues() {
 void *runner(void *param);
 
 int main(void) {
-    char buffer[5];
+    char buffer[MAX_LENGTH];
     pthread_t tid;
     pthread_attr_t attr;
 
