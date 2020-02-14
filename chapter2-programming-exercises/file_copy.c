@@ -44,7 +44,7 @@ int main(void) {
         strcat(final_string, output_file);
         printf("Executing: %s\n", final_string);
         system(final_string);
-        
+
     }
     else {
         printf("\nThe file does not exist. Try again.\n");

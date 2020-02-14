@@ -103,7 +103,7 @@ void *runner3(void *param) {
             final_list[i] = sub_list2[(i + 1) - (MAX_LEN / 2) - 1];
         }
     }
-
+    /* sort the final list */
     for (int i = 0; i < MAX_LEN; i++) {
         for (int k = 0; k < MAX_LEN - 1; k++) {
             if (final_list[k] > final_list[k + 1]) {
@@ -113,7 +113,5 @@ void *runner3(void *param) {
             }
         }
     }
-
-    /* sort the final list */
     pthread_exit(0);
 }
