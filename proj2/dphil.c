@@ -11,17 +11,34 @@ struct Philosopher {
     int is_thinking;
 };
 
+/* init mutex */
+pthread_mutex_t mutex;
+pthread_cond_t cond_var;
+
+/* condition */
+int dinnerIsOver = 0;
+
 void *runner(void *ph);
 
 void pickup_forks(int ph_id) {
-    printf("Philosopher %d is eating.\n", ph_id);
+    /* the philosopher is eating */
+    if (dinnerIsOver == 1) {
+        printf("Philosopher %d finished dinner eating.\n", ph_id);
+    }
 }
 
 void return_forks(int ph_id) {
-    printf("Philosopher %d is thinking.\n", ph_id);
+    /* the philosopher is thinking */
+    if (dinnerIsOver == 1) {
+        printf("Philosopher %d finished dinner thinking.\n", ph_id);
+    }
 }
 
 int main(void) {
+
+    /* set mutex and conditional var */
+    pthread_mutex_init(&mutex, NULL);
+    pthread_cond_init(&cond_var, NULL);
 
     /* init threads */
     pthread_t tid0;
@@ -91,9 +108,18 @@ int main(void) {
     pthread_attr_init(&attrs);
     pthread_create(&tid4, &attrs, runner, ph4addr);
 
+    /* enter 1 when to finish dinner */
+    char buffer[2];
+
+    printf("The philosophers are having dinner. Enter 1 to abruptly end dinner: ");
+
+    fflush(stdout);
+    fgets(buffer, sizeof(buffer), stdin);
+    
+    dinnerIsOver = atoi(buffer);
+
     /* let threads run */
     pthread_exit(NULL);
-
 }
 
 void *runner(void *pointer) {
@@ -107,6 +133,17 @@ void *runner(void *pointer) {
             return_forks(ph->id);
             ph->is_thinking = 1;
         }
+        pthread_mutex_lock(&mutex);
+        if (dinnerIsOver != 1) {
+            pthread_cond_wait(&mutex, &cond_var);
+        }
+        else {
+            pthread_cond_signal(&cond_var);
+            break;
+        }
+        pthread_mutex_unlock(&mutex);
         sleep(ph->alt_time);
     }
+    pthread_mutex_unlock(&mutex);
+    pthread_exit(0);
 }
