@@ -23,11 +23,17 @@ int release_resources(int customer_num, int request[]) {
 void *runner(void *params);
 
 int main(void) {
+
+    available[0] = 10;
+    available[1] = 5;
+    available[2] = 7;
     
     /* init threads */
     pthread_t customer1;
     pthread_t customer2;
     pthread_t customer3;
+    pthread_t customer4;
+    pthread_t customer5;
 
      /* thread default attrs */
     pthread_attr_t attrs;
@@ -41,6 +47,12 @@ int main(void) {
 
     pthread_attr_init(&attrs);
     pthread_create(&customer3, &attrs, runner, NULL);
+
+    pthread_attr_init(&attrs);
+    pthread_create(&customer4, &attrs, runner, NULL);
+
+    pthread_attr_init(&attrs);
+    pthread_create(&customer5, &attrs, runner, NULL);
 }
 
 void *runner(void *params) {
